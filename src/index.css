@@ -1,0 +1,38 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 10mm;
+  }
+  
+  body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    background-color: white !important;
+    overflow: visible !important;
+  }
+
+  /* Hide everything by default during print */
+  .print\:hidden {
+    display: none !important;
+  }
+
+  /* Ensure the print container fills the page and is visible */
+  #print-view-modal {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    background: white !important;
+    z-index: auto !important;
+  }
+
+  /* Force white background for print container */
+  .print-container {
+    background-color: white !important;
+    color: black !important;
+  }
+}
