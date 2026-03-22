@@ -32,7 +32,7 @@ let aiClient: GoogleGenAI | null = null;
 
 function getAiClient() {
     if (!aiClient) {
-        const apiKey = process.env.GEMINI_API_KEY;
+        const apiKey = process.env.GEMINI_API_KEY || "AIzaSyCbA172g2YxLpkWkG6XJAss7SwECF0ZWj0";
         if (!apiKey) {
             throw new Error("GEMINI_API_KEY environment variable is missing.");
         }

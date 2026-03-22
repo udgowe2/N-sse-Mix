@@ -23,7 +23,7 @@ export async function initDb() {
             port: parseInt(process.env.DB_PORT || '3447'), // User specified port 3447
             user: process.env.DB_USER || 'root',
             password: process.env.DB_PASSWORD || 'Welcome25$',
-            database: process.env.DB_NAME || 'baahi',
+            database: process.env.DB_NAME || 'Baahi',
             waitForConnections: true,
             connectionLimit: 10,
             queueLimit: 0
