@@ -368,13 +368,6 @@ export default function App() {
             >
               {isDark ? <Sun size={18} /> : <Moon size={18} />}
             </button>
-            <button
-              onClick={() => setShowPrintView(true)}
-              className={`flex items-center gap-2 px-4 py-2 border rounded-full text-sm font-bold transition-all shadow-sm ${isDark ? "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700" : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50"}`}
-            >
-              <Printer size={18} />
-              <span className="hidden sm:inline">Woche drucken</span>
-            </button>
           </div>
         </div>
       </header>
@@ -439,7 +432,7 @@ export default function App() {
                     className={`flex items-center gap-2 px-4 py-2 border rounded-full text-sm font-bold transition-all shadow-sm ${isDark ? "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700" : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50"}`}
                   >
                     <Printer size={18} />
-                    <span>Drucken</span>
+                    <span>Woche drucken</span>
                   </button>
 
                   <div className={`flex items-center gap-2 p-1 rounded-full shadow-sm border transition-colors ${isDark ? "bg-slate-900 border-slate-800" : "bg-white border-gray-100"}`}>

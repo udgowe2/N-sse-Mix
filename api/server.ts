@@ -25,27 +25,25 @@ async function startServer() {
     });
 
     // Admin Endpoint: Git Pull & Restart (Vereinfacht für den Browser)
-    app.get("/api/admin/git-pull", (req, res) => {
+    app.post("/api/admin/git-pull", (req, res) => {
         const adminSecret = process.env.ADMIN_SECRET;
+        const { password } = req.body;
         
-        // Wenn ein Secret in der .env definiert ist, prüfe es über die URL!
-        if (adminSecret) {
-            const providedSecret = req.query.secret;
-            if (providedSecret !== adminSecret) {
-                console.warn("Unautorisierter Versuch, ein Update durchzuführen!");
-                return res.status(401).send("<h1>Fehler: Falsches oder fehlendes Passwort in der URL.</h1>");
-            }
+        // Wenn ein Secret in der .env definiert ist, prüfe es!
+        if (adminSecret && password !== adminSecret) {
+            console.warn("Unautorisierter Versuch, ein Update durchzuführen!");
+            return res.status(401).json({ error: "Falsches Passwort." });
         }
 
         console.log("Führe 'git pull origin main' aus...");
         exec("git pull origin main", (error, stdout, stderr) => {
             if (error) {
                 console.error(`Git pull Fehler: ${error.message}`);
-                return res.status(500).send(`<h1>Fehler beim Update</h1><pre>${error.message}</pre>`);
+                return res.status(500).json({ error: `Update fehlgeschlagen: ${error.message}` });
             }
             
             console.log(`Git pull erfolgreich:\n${stdout}`);
-            res.send(`<h1>Update erfolgreich!</h1><p>Server startet neu...</p><pre>${stdout}</pre>`);
+            res.json({ message: "Update erfolgreich! Server startet neu...", output: stdout });
 
             // Server nach 1 Sekunde beenden
             setTimeout(() => {

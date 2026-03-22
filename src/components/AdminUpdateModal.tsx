@@ -21,15 +21,19 @@ export const AdminUpdateModal: React.FC<AdminUpdateModalProps> = ({ onClose }) =
 
     try {
       // We call the git-pull endpoint with the provided password
-      const response = await fetch(`/api/admin/git-pull?secret=${encodeURIComponent(password)}`);
-      const text = await response.text();
+      const response = await fetch("/api/admin/git-pull", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      const data = await response.json();
 
       if (response.ok) {
         setStatus("success");
         setMessage("Update erfolgreich gestartet! Der Server startet in wenigen Sekunden neu. Bitte laden Sie die Seite in 30 Sekunden neu.");
       } else {
         setStatus("error");
-        setMessage(text.includes("Falsches") ? "Falsches Passwort!" : "Fehler beim Update: " + text);
+        setMessage(data.error || "Ein unbekannter Fehler ist aufgetreten.");
       }
     } catch (err) {
       setStatus("error");
