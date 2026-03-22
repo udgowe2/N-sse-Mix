@@ -231,15 +231,18 @@ export default function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt }),
       });
+      
       const textData = await res.text();
       let data;
       try {
         data = JSON.parse(textData);
       } catch (e) {
-        throw new Error(`Server hat kein JSON gesendet (Läuft Node.js?): ${textData.substring(0, 100)}...`);
+        throw new Error(`Server hat kein JSON gesendet (Läuft Node.js? Status: ${res.status}): ${textData.substring(0, 100)}...`);
       }
       
-      if (data.error) throw new Error(data.error);
+      if (!res.ok) {
+        throw new Error(data.error || `Server error: ${res.status}`);
+      }
 
       // Instantly open the recipe form with the AI's data
       setEditingRecipe(data);

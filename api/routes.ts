@@ -32,7 +32,7 @@ let aiClient: GoogleGenAI | null = null;
 
 function getAiClient() {
     if (!aiClient) {
-        const apiKey = process.env.GEMINI_API_KEY || "AIzaSyCbA172g2YxLpkWkG6XJAss7SwECF0ZWj0";
+        const apiKey = process.env.GEMINI_API_KEY;
         if (!apiKey) {
             throw new Error("GEMINI_API_KEY environment variable is missing.");
         }
@@ -322,7 +322,7 @@ Rules:
 
         const ai = getAiClient();
         const aiResponse = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
+            model: "gemini-3-flash-preview",
             contents: geminiPrompt,
             config: {
                 systemInstruction: "You are a multilingual family recipe generator for a Muslim family. STRICT HALAL RULES: Never include alcohol, pork, lard, or any haram ingredients. All recipes must be 100% halal. Always respond with valid JSON matching the exact schema provided. Never wrap in markdown blocks, just raw JSON. IMPORTANT: Detect the language the user wrote in and respond in that same language throughout (title, ingredients, instructions, tags) — except the englishSearchTerm which must always be in English.",
@@ -364,8 +364,11 @@ Rules:
         });
 
         console.log("[API Generate] Received raw Gemini response.");
-
-        const recipeData = JSON.parse(aiResponse.text || "{}");
+        
+        const textOutput = aiResponse.text || "{}";
+        console.log("[API Generate] Raw text output:", textOutput);
+        
+        const recipeData = JSON.parse(textOutput.trim());
         recipeData.id = `ai-${Math.random().toString(36).substring(2, 11)}`;
         
         // Dynamically assign an image from Unsplash based on the AI's search term
@@ -380,7 +383,7 @@ Rules:
 
         res.json(recipeData);
     } catch (error: any) {
-        console.error("Generation error:", error);
+        console.error("[API Generate] Generation error:", error);
         res.status(500).json({ error: "Failed to generate recipe: " + error.message });
     }
 });

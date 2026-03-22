@@ -15,7 +15,7 @@ async function startServer() {
     await initDb();
 
     const app = express();
-    const PORT = parseInt(process.env.PORT || '3002');
+    const PORT = 3000;
 
     app.use(cors());
     app.use(express.json());
