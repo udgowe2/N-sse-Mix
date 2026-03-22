@@ -35,15 +35,16 @@ async function startServer() {
             return res.status(401).json({ error: "Falsches Passwort." });
         }
 
-        console.log("Führe 'git pull origin main' aus...");
-        exec("git pull origin main", (error, stdout, stderr) => {
+        console.log("Führe Update-Prozess aus (git pull, npm install, npm run build)...");
+        // Wir führen pull, install und build nacheinander aus
+        exec("git pull origin main && npm install && npm run build", (error, stdout, stderr) => {
             if (error) {
-                console.error(`Git pull Fehler: ${error.message}`);
+                console.error(`Update Fehler: ${error.message}`);
                 return res.status(500).json({ error: `Update fehlgeschlagen: ${error.message}` });
             }
             
-            console.log(`Git pull erfolgreich:\n${stdout}`);
-            res.json({ message: "Update erfolgreich! Server startet neu...", output: stdout });
+            console.log(`Update erfolgreich:\n${stdout}`);
+            res.json({ message: "Update & Build erfolgreich! Server startet neu...", output: stdout });
 
             // Server nach 1 Sekunde beenden
             setTimeout(() => {
