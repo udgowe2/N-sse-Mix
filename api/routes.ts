@@ -61,7 +61,7 @@ apiRouter.post("/recipes", async (req, res) => {
     try {
         const { id, title, image, prepTime, mealTime, category, ingredients, instructions, tags, sourceUrl } = req.body;
         await pool.query(`
-      INSERT OR REPLACE INTO recipes (id, title, image, prepTime, mealTime, category, ingredients, instructions, tags, sourceUrl)
+      REPLACE INTO recipes (id, title, image, prepTime, mealTime, category, ingredients, instructions, tags, sourceUrl)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `, [id, title, image, prepTime, mealTime || null, category || null, JSON.stringify(ingredients), instructions, JSON.stringify(tags), sourceUrl]);
         res.json({ success: true });
@@ -130,7 +130,7 @@ apiRouter.post("/planner", async (req, res) => {
         const { weekId = 'current', dayIndex, mealType, recipeIds, helperName } = req.body;
         const id = `week-${weekId}-day-${dayIndex}-${mealType}`;
         await pool.query(`
-      INSERT OR REPLACE INTO planner (id, weekId, dayIndex, mealType, recipeIds, helperName)
+      REPLACE INTO planner (id, weekId, dayIndex, mealType, recipeIds, helperName)
       VALUES (?, ?, ?, ?, ?, ?)
     `, [id, weekId, dayIndex, mealType, JSON.stringify(recipeIds), helperName]);
         res.json({ success: true });
@@ -156,7 +156,7 @@ apiRouter.post("/shopping", async (req, res) => {
     try {
         const { id, name, amount, isCompleted } = req.body;
         await pool.query(`
-      INSERT OR REPLACE INTO shopping_list (id, name, amount, isCompleted)
+      REPLACE INTO shopping_list (id, name, amount, isCompleted)
       VALUES (?, ?, ?, ?)
     `, [id, name, amount, isCompleted ? 1 : 0]);
         res.json({ success: true });
@@ -213,7 +213,7 @@ apiRouter.post("/tasks", async (req, res) => {
     try {
         const { id, dateStr, text, isCompleted, isSmartTask } = req.body;
         await pool.query(`
-      INSERT OR REPLACE INTO daily_tasks (id, dateStr, text, isCompleted, isSmartTask)
+      REPLACE INTO daily_tasks (id, dateStr, text, isCompleted, isSmartTask)
       VALUES (?, ?, ?, ?, ?)
     `, [id, dateStr, text, isCompleted ? 1 : 0, isSmartTask ? 1 : 0]);
         res.json({ success: true });
